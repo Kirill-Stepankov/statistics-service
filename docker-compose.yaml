@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  statistics_service:
+    container_name: statistics_service
+    command: sh -c "uvicorn --factory src.main:create_app --host 0.0.0.0 --port 8000 --reload"
+    build:
+      context: ./statistics_service
+    volumes:
+      - ./statistics_service:/app
+    ports:
+      - "8002:8000"
+    networks:
+      - innotter
+volumes:
+  postgres_data:
+  redis_data:
+  localstack-data:
+networks:
+  innotter:
+    external: true
