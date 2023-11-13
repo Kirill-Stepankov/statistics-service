@@ -20,3 +20,6 @@ def create_app():
         }
 
     return app
+
+
+# mongodb docker, mongodb sesssion and repository, ses configurate and kafka and github workflow with testing
