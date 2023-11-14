@@ -11,6 +11,16 @@ class Settings(BaseSettings):
     aws_secret_access_key: str
     email_identity: str
 
+    mongo_db_name: str
+    mongo_db_host: str
+    mongo_db_port: int
+    mongo_db_username: str
+    mongo_db_password: str
+    mongo_db_auth_mechanism: str
+
+    mongo_initdb_root_username: str
+    mongo_initdb_root_password: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
 

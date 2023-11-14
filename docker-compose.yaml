@@ -12,10 +12,20 @@ services:
       - "8002:8000"
     networks:
       - innotter
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    volumes:
+      - mongodb_data:/data/db
+    env_file:
+      - statistics_service/.env
+    ports:
+      - "27017:27017"
+    networks:
+      - innotter
+
 volumes:
-  postgres_data:
-  redis_data:
-  localstack-data:
+  mongodb_data:
 networks:
   innotter:
     external: true
