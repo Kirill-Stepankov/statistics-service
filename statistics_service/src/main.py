@@ -17,17 +17,17 @@ settings = config.get_settings()
 
 def create_app():
     loop = asyncio.get_event_loop()
-    consumer = AIOKafkaConsumer(
+    kafka_consumer = AIOKafkaConsumer(
         settings.kafka_topic, bootstrap_servers=settings.bootstrap_servers, loop=loop
     )
 
-    consumer = Consumer(loop, consumer)
+    db = get_db()
+
+    consumer = Consumer(loop, kafka_consumer, pages_stats_service(db))
 
     app = FastAPI(lifespan=consumer.lifespan)
 
     app.include_router(router)
-
-    db = get_db()
 
     app.dependency_overrides[AbstractPagesStatisticsService] = partial(
         pages_stats_service, db

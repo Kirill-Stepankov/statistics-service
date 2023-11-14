@@ -13,3 +13,6 @@ class PagesStatisticsService(AbstractPagesStatisticsService):
 
     async def insert(self, document: dict):
         return await self.pages_stats_repo.add_one(document)
+
+    async def update_statistics(self, payload: dict):
+        print(payload)

@@ -14,9 +14,10 @@ logger = get_logger()
 
 
 class Consumer:
-    def __init__(self, loop, kafka_consumer) -> None:
+    def __init__(self, loop, kafka_consumer, pages_stats_service) -> None:
         self.loop = loop
         self.consumer = kafka_consumer
+        self.pages_stats_service = pages_stats_service
 
     async def consume(self):
         logger.info("Starting consuming..")
@@ -24,7 +25,7 @@ class Consumer:
         async for msg in self.consumer:
             json_string = msg.value.decode("utf-8").replace("'", '"')
             payload = json.loads(json_string)
-            print(payload)
+            await self.pages_stats_service.update_statistics(payload)
 
     @asynccontextmanager
     async def lifespan(self, app: FastAPI):
