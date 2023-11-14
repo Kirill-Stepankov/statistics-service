@@ -15,4 +15,5 @@ class PagesStatisticsService(AbstractPagesStatisticsService):
         return await self.pages_stats_repo.add_one(document)
 
     async def update_statistics(self, payload: dict):
+        # здесь будет обновление бд
         print(payload)
