@@ -24,6 +24,12 @@ class Settings(BaseSettings):
     bootstrap_servers: str
     kafka_topic: str
 
+    kafka_advertised_listeners: str
+    kafka_listener_security_protocol_map: str
+    kafka_listeners: str
+    kafka_inter_broker_listener_name: str
+    kafka_zookeeper_connect: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
