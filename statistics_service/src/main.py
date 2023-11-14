@@ -40,3 +40,6 @@ def create_app():
         }
 
     return app
+
+
+# осталось: end stats service, endpoint for getting page stats by id, celery schedule task, sending email to admin
