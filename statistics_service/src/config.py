@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     mongo_initdb_root_username: str
     mongo_initdb_root_password: str
 
+    bootstrap_servers: str
+    kafka_topic: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
