@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  statistics_service:
+    container_name: statistics_service
+    command: sh -c "uvicorn --factory src.main:create_app --host 0.0.0.0 --port 8000 --reload"
+    build:
+      context: ./statistics_service
+    volumes:
+      - ./statistics_service:/app
+    ports:
+      - "8002:8000"
+    networks:
+      - innotter
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    volumes:
+      - mongodb_data:/data/db
+    env_file:
+      - statistics_service/.env
+    ports:
+      - "27017:27017"
+    networks:
+      - innotter
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    ports:
+      - "2181:2181"
+    networks:
+      - innotter
+  kafka:
+    image: wurstmeister/kafka:2.12-2.2.0
+    ports:
+      - "9092:9092"
+    expose:
+      - "9093"
+    env_file:
+      - statistics_service/.env
+    networks:
+      - innotter
+volumes:
+  mongodb_data:
+networks:
+  innotter:
+    external: true
