@@ -1,12 +1,15 @@
+from typing import Any
+
 from fastapi import APIRouter, Depends, Header, Query, status
 
 from .service import AbstractPagesStatisticsService
+from .shemas import PostStatsOutputSchema
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="/stats", tags=["statistics"])
 
 
-@router.get("/testdb")
-async def testdb(pages_stats_service: AbstractPagesStatisticsService = Depends()):
-    response = await pages_stats_service.insert({"user": "key"})
-    print(response)
-    return {"ok": "ok"}
+@router.get("/{post_id}", response_model=PostStatsOutputSchema)
+async def get_statistics(
+    post_id: int, pages_stats_service: AbstractPagesStatisticsService = Depends()
+) -> Any:
+    return await pages_stats_service.get_post_statistics(post_id)

@@ -56,4 +56,4 @@ def create_app():
     return app
 
 
-# осталось: endpoint for getting page stats by id, (celery schedule task, sending email to admin)
+# осталось: (celery schedule task, sending email to admin)

@@ -3,6 +3,8 @@ from abc import ABC
 
 from src.abstract import AbstractRepository
 
+from .shemas import PostStatsOutputSchema
+
 
 class AbstractPagesStatisticsService(ABC):
     pass
@@ -16,9 +18,8 @@ class PagesStatisticsService(AbstractPagesStatisticsService):
         return await self.pages_stats_repo.add_one(document)
 
     async def update_statistics(self, payload):
-        print(payload)
-        document = await self.pages_stats_repo.get_document_by_page_id(
-            payload.get("page_id")
+        document = await self.pages_stats_repo.get_document_by_post_id(
+            payload.get("post_id")
         )
         if not document:
             document = {
@@ -37,3 +38,7 @@ class PagesStatisticsService(AbstractPagesStatisticsService):
             payload.get("stats_type"),
             payload.get("operation"),
         )
+
+    async def get_post_statistics(self, post_id: int):
+        document = await self.pages_stats_repo.get_document_by_post_id(post_id)
+        return PostStatsOutputSchema(**document)
