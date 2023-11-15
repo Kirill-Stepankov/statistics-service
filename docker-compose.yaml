@@ -43,7 +43,7 @@ services:
     container_name: redis_stats
     restart: unless-stopped
     image: redis:7.0.5-alpine
-    expose:
+    ports:
       - 6378:6379
     volumes:
       - redis_stats_data:/data
