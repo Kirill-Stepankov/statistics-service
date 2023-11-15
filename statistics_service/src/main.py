@@ -1,4 +1,5 @@
 import asyncio
+import json
 from functools import partial
 from typing import Annotated
 
@@ -17,8 +18,21 @@ settings = config.get_settings()
 
 def create_app():
     loop = asyncio.get_event_loop()
+
+    def forgiving_json_deserializer(v):
+        if v is None:
+            return
+        try:
+            return json.loads(v.decode("utf-8"))
+        except json.decoder.JSONDecodeError:
+            return None
+
     kafka_consumer = AIOKafkaConsumer(
-        settings.kafka_topic, bootstrap_servers=settings.bootstrap_servers, loop=loop
+        settings.kafka_topic,
+        bootstrap_servers=settings.bootstrap_servers,
+        auto_offset_reset="latest",
+        loop=loop,
+        value_deserializer=forgiving_json_deserializer,
     )
 
     db = get_db()

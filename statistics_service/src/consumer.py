@@ -23,9 +23,7 @@ class Consumer:
         logger.info("Starting consuming..")
         await self.consumer.start()
         async for msg in self.consumer:
-            json_string = msg.value.decode("utf-8").replace("'", '"')
-            payload = json.loads(json_string)
-            await self.pages_stats_service.update_statistics(payload)
+            await self.pages_stats_service.update_statistics(msg.value)
 
     @asynccontextmanager
     async def lifespan(self, app: FastAPI):
