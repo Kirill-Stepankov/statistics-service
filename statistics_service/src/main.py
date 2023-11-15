@@ -1,8 +1,11 @@
+from __future__ import absolute_import, unicode_literals
+
 import asyncio
 import json
 from functools import partial
 from typing import Annotated
 
+import celery
 from aiokafka import AIOKafkaConsumer
 from fastapi import Depends, FastAPI
 from src.pages.dependencies import pages_stats_service
@@ -12,6 +15,7 @@ from src.pages.service import AbstractPagesStatisticsService
 from . import config
 from .consumer import Consumer
 from .database import get_db
+from .exceptions_handlers import init_exception_handlers
 
 settings = config.get_settings()
 
@@ -41,6 +45,8 @@ def create_app():
 
     app = FastAPI(lifespan=consumer.lifespan)
 
+    init_exception_handlers(app)
+
     app.include_router(router)
 
     app.dependency_overrides[AbstractPagesStatisticsService] = partial(
@@ -54,6 +60,3 @@ def create_app():
         }
 
     return app
-
-
-# осталось: (celery schedule task, sending email to admin)

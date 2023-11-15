@@ -3,6 +3,7 @@ from abc import ABC
 
 from src.abstract import AbstractRepository
 
+from .exceptions import ThereIsNoStatisticsForPostException
 from .shemas import PostStatsOutputSchema
 
 
@@ -41,4 +42,11 @@ class PagesStatisticsService(AbstractPagesStatisticsService):
 
     async def get_post_statistics(self, post_id: int):
         document = await self.pages_stats_repo.get_document_by_post_id(post_id)
+        if not document:
+            raise ThereIsNoStatisticsForPostException(post_id)
         return PostStatsOutputSchema(**document)
+
+    async def get_posts_statistics(self):
+        documents_cursor = await self.pages_stats_repo.get_documents_group_by_page()
+        statistics = [document async for document in documents_cursor]
+        return statistics

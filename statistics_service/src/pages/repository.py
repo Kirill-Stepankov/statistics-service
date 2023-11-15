@@ -14,3 +14,9 @@ class PagesStatisticsRepository(MongoDBRepository):
             {"page_id": page_id, "post_id": post_id},
             {"$inc": {stats_type: operation or -1}},
         )
+
+    async def get_documents_group_by_page(self):
+        documents_cursor = self.db[self.collection].aggregate(
+            [{"$group": {"_id": "$page_id", "totalAmountOfLikes": {"$sum": "$like"}}}]
+        )
+        return documents_cursor

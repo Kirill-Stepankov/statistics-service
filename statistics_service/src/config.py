@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     kafka_inter_broker_listener_name: str
     kafka_zookeeper_connect: str
 
+    celery_broker_url: str
+    celery_backend_url: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
