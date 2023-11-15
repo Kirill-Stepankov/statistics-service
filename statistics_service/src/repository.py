@@ -16,12 +16,3 @@ class MongoDBRepository(AbstractRepository):
     async def add_one(self, document: dict | Any):
         result = await self.db[self.collection].insert_one(document)
         return result.inserted_id
-
-    async def get():
-        pass
-
-    async def find():
-        pass
-
-    async def delete():
-        pass
