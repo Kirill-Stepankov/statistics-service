@@ -39,8 +39,31 @@ services:
       - statistics_service/.env
     networks:
       - innotter
+  redis_stats:
+    container_name: redis_stats
+    restart: unless-stopped
+    image: redis:7.0.5-alpine
+    ports:
+      - 6378:6379
+    volumes:
+      - redis_stats_data:/data
+    networks:
+      - innotter
+  celery_worker_stats:
+    build:
+      context: ./statistics_service
+    command: celery -A src.celery.app worker -l info
+    networks:
+      - innotter
+  celery_beat_stats:
+    build:
+      context: ./statistics_service
+    command: celery -A src.celery.app beat -l info
+    networks:
+      - innotter
 volumes:
   mongodb_data:
+  redis_stats_data:
 networks:
   innotter:
     external: true
